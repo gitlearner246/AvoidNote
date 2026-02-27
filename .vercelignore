@@ -1,0 +1,15 @@
+# Ignore local environment files
+
+.env
+.env.\*
+
+# Ignore documentation and Git history
+
+README.md
+.git/
+.gitignore
+
+# Ignore local build folders
+
+dist/
+node_modules/

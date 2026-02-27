@@ -1,0 +1,17 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // We will get this from Vercel/Supabase
+}
+
+model Report {
+  id          String   @id @default(cuid())
+  domain      String
+  type        String
+  severity    String
+  description String
+  createdAt   DateTime @default(now())
+}

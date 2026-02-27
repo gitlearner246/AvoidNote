@@ -1,0 +1,10 @@
+@import 'tailwindcss';
+
+/* Keep your custom styles below this line */
+:root {
+  color-scheme: light;
+}
+
+body {
+  @apply bg-slate-50 text-slate-900 antialiased;
+}
