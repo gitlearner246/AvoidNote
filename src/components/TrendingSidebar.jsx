@@ -7,10 +7,16 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 
-const TrendingSidebar = ({ reports }) => {
-  // 1. Trending Logic: Count occurrences of each violation type
+const TrendingSidebar = ({ reports = [] }) => {
+  // 1. Trending Logic: Safely count occurrences (checks for type OR category)
   const counts = reports.reduce((acc, report) => {
-    acc[report.type] = (acc[report.type] || 0) + 1;
+    // If your database uses 'category' instead of 'type', this catches it.
+    const threatType = report.type || report.category;
+
+    // If there is no type at all, skip it so we don't render "undefined"
+    if (!threatType) return acc;
+
+    acc[threatType] = (acc[threatType] || 0) + 1;
     return acc;
   }, {});
 
@@ -41,7 +47,10 @@ const TrendingSidebar = ({ reports }) => {
           <div className='space-y-6'>
             {topOffenders.length > 0 ? (
               topOffenders.map((report, index) => (
-                <div key={report.id} className='flex items-center group'>
+                <div
+                  key={report.id || index}
+                  className='flex items-center group'
+                >
                   <span className='text-3xl font-black text-slate-700 mr-4 group-hover:text-emerald-500 transition-colors'>
                     {index + 1}
                   </span>
@@ -81,27 +90,33 @@ const TrendingSidebar = ({ reports }) => {
           </div>
 
           <div className='space-y-6'>
-            {trending.map(([type, count]) => (
-              <div key={type} className='group cursor-pointer'>
-                <div className='flex justify-between items-start mb-1'>
-                  <span className='text-sm font-bold text-slate-900 group-hover:text-emerald-600 transition-colors'>
-                    {type}
-                  </span>
-                  <ArrowUpRight className='w-4 h-4 text-slate-300 group-hover:text-emerald-500 transition-all' />
-                </div>
-                <div className='flex items-center'>
-                  <div className='flex-1 h-1.5 bg-slate-200 rounded-full overflow-hidden'>
-                    <div
-                      className='h-full bg-slate-900 group-hover:bg-emerald-500 transition-all duration-500'
-                      style={{ width: `${(count / reports.length) * 100}%` }}
-                    />
+            {trending.length > 0 ? (
+              trending.map(([threatName, count]) => (
+                <div key={threatName} className='group cursor-pointer'>
+                  <div className='flex justify-between items-start mb-1'>
+                    <span className='text-sm font-bold text-slate-900 group-hover:text-emerald-600 transition-colors'>
+                      {threatName}
+                    </span>
+                    <ArrowUpRight className='w-4 h-4 text-slate-300 group-hover:text-emerald-500 transition-all' />
                   </div>
-                  <span className='ml-3 text-xs font-black text-slate-400'>
-                    {count}
-                  </span>
+                  <div className='flex items-center'>
+                    <div className='flex-1 h-1.5 bg-slate-200 rounded-full overflow-hidden'>
+                      <div
+                        className='h-full bg-slate-900 group-hover:bg-emerald-500 transition-all duration-500'
+                        style={{ width: `${(count / reports.length) * 100}%` }}
+                      />
+                    </div>
+                    <span className='ml-3 text-xs font-black text-slate-400'>
+                      {count}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className='text-xs font-bold text-slate-400 italic uppercase tracking-widest text-center py-4'>
+                Analyzing threat data...
+              </p>
+            )}
           </div>
         </div>
       </div>
