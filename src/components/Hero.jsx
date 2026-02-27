@@ -1,80 +1,81 @@
 import React, { useState } from 'react';
-import { Search, Loader2, CheckCircle2, ShieldX } from 'lucide-react';
-
-const MALICIOUS_DB = ['free-prizes.net', 'ultra-stream-service.co'];
+import { ShieldCheck, ShieldAlert, Search, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 const Hero = () => {
   const [url, setUrl] = useState('');
-  const [status, setStatus] = useState('idle');
-  const [result, setResult] = useState(null);
+  const [isScanning, setIsScanning] = useState(false);
 
-  const handleScan = (e) => {
+  const handleScan = async (e) => {
     e.preventDefault();
     if (!url) return;
-    setStatus('scanning');
-    setTimeout(() => {
-      let domain = url
-        .replace(/^(?:https?:\/\/)?(?:www\.)?/i, '')
-        .split('/')[0];
-      setResult({
-        isSafe: !MALICIOUS_DB.includes(domain.toLowerCase()),
-        domain,
-      });
-      setStatus('results');
-    }, 1000);
+
+    setIsScanning(true);
+
+    try {
+      const response = await fetch(`/api/scan?url=${encodeURIComponent(url)}`);
+      const data = await response.json();
+
+      if (data.safe) {
+        toast.success('No active threats found!', {
+          description: "This domain isn't in our Evidence Locker yet.",
+          icon: <ShieldCheck className='text-emerald-500' />,
+        });
+      } else {
+        toast.error('Warning: Dark Pattern Detected', {
+          description: `Identified as: ${data.report.type}`,
+          icon: <ShieldAlert className='text-red-500' />,
+        });
+      }
+    } catch (err) {
+      toast.error('Scanner offline. Check your connection.');
+    } finally {
+      setIsScanning(false);
+    }
   };
 
   return (
-    <section id='scan' className='pt-44 pb-32 px-6 bg-mesh'>
-      <div className='max-w-3xl mx-auto text-center'>
-        <h1 className='text-6xl md:text-8xl font-black tracking-tight text-slate-900 mb-8 leading-[0.9]'>
-          The web, <br />
-          <span className='text-emerald-500 italic'>unfiltered.</span>
+    <div className='relative pt-32 pb-20 px-6 overflow-hidden'>
+      <div className='max-w-4xl mx-auto text-center'>
+        <h1 className='text-7xl md:text-8xl font-black tracking-tighter text-slate-900 mb-8 leading-[0.9]'>
+          STAY <span className='text-emerald-500 italic'>LEGIT.</span>
+          <br />
+          AVOID THE TRAP.
         </h1>
-        <p className='text-slate-500 text-lg md:text-xl font-medium mb-12 max-w-xl mx-auto leading-relaxed'>
-          The open-source intelligence platform to scan, report, and block
-          deceptive ad patterns.
+
+        <p className='text-xl text-slate-500 font-medium mb-12 max-w-2xl mx-auto'>
+          The web's community-driven defense against deceptive ad patterns,
+          malicious redirects, and dark interfaces.
         </p>
 
-        <form onSubmit={handleScan} className='relative max-w-xl mx-auto'>
-          <div className='flex items-center bg-white border border-slate-200/60 rounded-2xl p-1.5 shadow-[0_20px_50px_rgba(0,0,0,0.05)] focus-within:ring-4 focus-within:ring-emerald-500/5 transition-all'>
-            <input
-              type='text'
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              placeholder='Enter a suspicious URL...'
-              className='w-full bg-transparent border-none py-4 px-6 text-slate-900 placeholder-slate-400 outline-none text-base font-medium'
-            />
-            <button
-              type='submit'
-              className='bg-emerald-500 text-white h-12 px-8 rounded-xl font-bold hover:bg-emerald-600 transition-all flex items-center gap-2'
-            >
-              {status === 'scanning' ? (
-                <Loader2 className='animate-spin' size={18} />
-              ) : (
-                'Analyze'
-              )}
-            </button>
-          </div>
-
-          {status === 'results' && (
-            <div
-              className={`mt-6 p-4 rounded-2xl border flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-500 font-bold text-sm
-              ${result.isSafe ? 'bg-emerald-50 border-emerald-100 text-emerald-700' : 'bg-rose-50 border-rose-100 text-rose-700'}`}
-            >
-              {result.isSafe ? (
-                <CheckCircle2 size={18} />
-              ) : (
-                <ShieldX size={18} />
-              )}
-              {result.isSafe
-                ? `${result.domain} appears to be safe.`
-                : `Alert: ${result.domain} is flagged.`}
-            </div>
-          )}
+        <form
+          onSubmit={handleScan}
+          className='relative max-w-2xl mx-auto group'
+        >
+          <input
+            type='text'
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            placeholder='Paste suspicious URL here...'
+            className='w-full bg-white border-2 border-slate-100 py-6 px-8 rounded-[32px] text-lg font-bold shadow-2xl focus:border-emerald-500 focus:ring-0 transition-all outline-none'
+          />
+          <button
+            type='submit'
+            disabled={isScanning}
+            className='absolute right-3 top-3 bottom-3 bg-slate-900 text-white px-8 rounded-[24px] font-black hover:bg-emerald-600 transition-all flex items-center disabled:opacity-50'
+          >
+            {isScanning ? (
+              <Loader2 className='w-5 h-5 animate-spin' />
+            ) : (
+              <>
+                <Search className='w-5 h-5 mr-2' />
+                Analyze
+              </>
+            )}
+          </button>
         </form>
       </div>
-    </section>
+    </div>
   );
 };
 

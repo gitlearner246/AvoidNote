@@ -1,36 +1,47 @@
 import React from 'react';
-import { AlertCircle, Clock, ArrowUpRight } from 'lucide-react';
+import { ShieldAlert, Clock, ChevronRight } from 'lucide-react';
+import { formatDistanceToNow } from 'date-fns'; // The "magic" function
 
 const ViolationCard = ({ report, onClick }) => {
-  const { domain, type, severity, time } = report;
+  // Convert the DB string into a "3 mins ago" style text
+  // We add { addSuffix: true } to get "ago" at the end
+  const timeAgo = report.createdAt
+    ? formatDistanceToNow(new Date(report.createdAt), { addSuffix: true })
+    : 'Recently';
+
+  const severityColors = {
+    critical: 'bg-red-50 text-red-600 border-red-100',
+    warning: 'bg-amber-50 text-amber-600 border-amber-100',
+    safe: 'bg-emerald-50 text-emerald-600 border-emerald-100',
+  };
 
   return (
     <div
       onClick={() => onClick(report)}
-      className='bg-white p-6 rounded-[24px] border border-slate-200/60 hover:shadow-[0_20px_40px_rgba(0,0,0,0.04)] hover:-translate-y-1 transition-all duration-300 cursor-pointer group'
+      className='group bg-white border border-slate-100 p-8 rounded-[32px] hover:shadow-2xl hover:shadow-emerald-500/10 transition-all cursor-pointer active:scale-[0.98]'
     >
       <div className='flex justify-between items-start mb-6'>
         <div
-          className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border
-          ${severity === 'critical' ? 'bg-rose-50 text-rose-600 border-rose-100' : 'bg-amber-50 text-amber-600 border-amber-100'}`}
+          className={`px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest border ${severityColors[report.severity]}`}
         >
-          {severity}
+          {report.severity}
         </div>
-        <ArrowUpRight
-          size={18}
-          className='text-slate-300 group-hover:text-emerald-500 transition-colors'
-        />
+        <div className='flex items-center text-slate-400 text-sm font-medium'>
+          <Clock className='w-4 h-4 mr-1.5' />
+          {timeAgo} {/* Now displays as "2 minutes ago" */}
+        </div>
       </div>
 
-      <h3 className='text-xl font-bold text-slate-900 mb-1 group-hover:text-emerald-600 transition-colors'>
-        {domain}
+      <h3 className='text-2xl font-black text-slate-900 mb-2 truncate group-hover:text-emerald-600 transition-colors'>
+        {report.domain}
       </h3>
-      <div className='flex items-center gap-2 text-rose-500 mb-4 font-bold text-[12px]'>
-        <AlertCircle size={14} /> {type}
-      </div>
+      <p className='text-slate-500 font-medium mb-6 line-clamp-2 leading-relaxed'>
+        {report.description}
+      </p>
 
-      <div className='flex items-center gap-2 pt-4 border-t border-slate-50 text-slate-400 text-[11px] font-medium'>
-        <Clock size={12} /> {time}
+      <div className='flex items-center text-slate-900 font-bold text-sm'>
+        View Evidence
+        <ChevronRight className='w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform' />
       </div>
     </div>
   );

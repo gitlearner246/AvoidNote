@@ -3,6 +3,9 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -10,15 +13,21 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.4.1",
     "@prisma/client": "^7.4.1",
     "@tailwindcss/postcss": "^4.2.1",
+    "date-fns": "^4.1.0",
     "lucide-react": "^0.575.0",
+    "pg": "^8.19.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-helmet-async": "^2.0.5",
     "sonner": "^2.0.7"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@prisma/config": "^7.4.1",
+    "@tailwindcss/vite": "^4.2.1",
     "@types/react": "^19.2.7",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",

@@ -4,14 +4,15 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL") // We will get this from Vercel/Supabase
+  // 🚀 URL IS REMOVED FROM HERE FOR PRISMA 7
 }
 
 model Report {
-  id          String   @id @default(cuid())
-  domain      String
-  type        String
-  severity    String
-  description String
-  createdAt   DateTime @default(now())
+  id             String   @id @default(cuid())
+  domain         String
+  type           String
+  severity       String
+  description    String
+  verifications  Int      @default(0)
+  createdAt      DateTime @default(now())
 }
