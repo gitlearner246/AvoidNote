@@ -20,12 +20,16 @@ export default function App() {
     async function fetchReports() {
       try {
         const response = await fetch('/api/reports');
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          throw new Error('API Route Sync Error');
+        }
         if (!response.ok) throw new Error('Failed to fetch');
         const data = await response.json();
         setReports(data);
       } catch (error) {
         console.error('Error loading reports:', error);
-        toast.error('Could not load the Evidence Locker.');
+        toast.error('Security Records offline.');
       } finally {
         setIsLoading(false);
       }
@@ -44,54 +48,52 @@ export default function App() {
   return (
     <div className='min-h-screen bg-white text-slate-900 selection:bg-emerald-100 font-sans'>
       <Toaster position='bottom-right' richColors expand={true} />
-
       <Navbar />
 
       <main>
         <Hero />
 
-        <section id='reports' className='max-w-7xl mx-auto px-6 py-24'>
-          <div className='mb-12 flex flex-col md:flex-row md:items-end justify-between gap-8'>
-            <div className='flex-1'>
-              <h2 className='text-4xl font-black tracking-tight text-slate-900'>
-                The Evidence Locker
+        {/* GAP FIXED: pt-0 brings the database right under the scanner */}
+        <section id='reports' className='max-w-7xl mx-auto px-6 pt-0 pb-24'>
+          <div className='mb-12 flex flex-col md:flex-row md:items-end justify-between gap-8 border-t border-slate-50 pt-16'>
+            <div className='flex-1 text-left'>
+              {/* REPHRASED FOR CLARITY */}
+              <h2 className='text-4xl font-black tracking-tight text-slate-900 uppercase italic'>
+                Verified Threat Records
               </h2>
-
               <div className='flex gap-3 mt-6'>
                 {['all', 'critical', 'warning'].map((cat) => (
                   <button
                     key={cat}
                     onClick={() => setCategory(cat)}
-                    className={`px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest transition-all ${
-                      category === cat
-                        ? 'bg-slate-900 text-white shadow-lg'
-                        : 'bg-slate-50 text-slate-400 hover:bg-slate-100'
-                    }`}
+                    className={`px-6 py-2 rounded-full text-xs font-black uppercase tracking-widest transition-all ${category === cat ? 'bg-slate-900 text-white shadow-lg' : 'bg-slate-50 text-slate-400 hover:bg-slate-100'}`}
                   >
                     {cat}
                   </button>
                 ))}
               </div>
             </div>
-
             <div className='relative group w-full md:w-96'>
               <SearchIcon className='absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-emerald-500 transition-colors' />
               <input
                 type='text'
-                placeholder='Filter by domain or type...'
+                placeholder='Search records...'
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className='w-full bg-slate-50 border-2 border-slate-100 py-4 pl-12 pr-4 rounded-2xl font-bold focus:border-emerald-500 focus:bg-white transition-all outline-none shadow-sm'
+                className='w-full bg-slate-50 border-2 border-slate-100 py-4 pl-12 pr-4 rounded-2xl font-bold focus:border-emerald-500 outline-none shadow-sm'
               />
             </div>
           </div>
 
-          <div className='flex flex-col lg:flex-row gap-12'>
+          <div className='flex flex-col lg:flex-row gap-12 text-left'>
             <div className='flex-1'>
               {isLoading ? (
                 <div className='grid grid-cols-1 md:grid-cols-2 gap-8 animate-pulse'>
                   {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className='h-64 bg-slate-100 rounded-[32px]' />
+                    <div
+                      key={i}
+                      className='h-64 bg-slate-50 rounded-[32px] border-2 border-slate-100'
+                    />
                   ))}
                 </div>
               ) : filteredReports.length > 0 ? (
@@ -105,9 +107,9 @@ export default function App() {
                   ))}
                 </div>
               ) : (
-                <div className='text-center py-20 bg-slate-50 rounded-[40px] border-2 border-dashed border-slate-200'>
+                <div className='text-center py-20 bg-slate-50 rounded-[40px] border-2 border-dashed border-slate-200 w-full'>
                   <p className='text-slate-400 font-bold uppercase tracking-widest'>
-                    No matching evidence found in the locker.
+                    No records found in database.
                   </p>
                 </div>
               )}
@@ -135,14 +137,13 @@ export default function App() {
             href='mailto:support@avoidnote.com'
             className='hover:text-slate-900 transition-colors'
           >
-            Contact Legal
+            Legal Contact
           </a>
         </div>
         <p className='text-slate-400 text-xs'>
-          &copy; 2026 Avoid Note &bull; Secure the Web from Salzburg
+          &copy; 2026 Avoid Note &bull; Salzburg, Austria
         </p>
       </footer>
-
       {showPrivacy && <PrivacyPolicy onClose={() => setShowPrivacy(false)} />}
     </div>
   );
