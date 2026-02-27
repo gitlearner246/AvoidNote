@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Toaster, toast } from 'sonner';
-import { Search } from 'lucide-react';
+import { Search as SearchIcon } from 'lucide-react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import ViolationCard from './components/ViolationCard';
-import ReportModal from './components/ReportModal';
 import ViolationDetail from './components/ViolationDetail';
 import TrendingSidebar from './components/TrendingSidebar';
-// --- THE MISSING LINK ---
 import PrivacyPolicy from './components/PrivacyPolicy';
 
 export default function App() {
-  // --- States ---
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedReport, setSelectedReport] = useState(null);
   const [reports, setReports] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -20,7 +16,6 @@ export default function App() {
   const [category, setCategory] = useState('all');
   const [showPrivacy, setShowPrivacy] = useState(false);
 
-  // --- 1. Fetch live reports from Vercel/Prisma ---
   useEffect(() => {
     async function fetchReports() {
       try {
@@ -38,34 +33,11 @@ export default function App() {
     fetchReports();
   }, []);
 
-  // --- 2. Handle adding new reports ---
-  const handleAddReport = async (reportData) => {
-    try {
-      const response = await fetch('/api/reports', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(reportData),
-      });
-
-      if (!response.ok) throw new Error('Failed to save');
-
-      const savedReport = await response.json();
-      setReports((prev) => [savedReport, ...prev]);
-      toast.success('Evidence recorded in the database!');
-    } catch (error) {
-      console.error('Save error:', error);
-      toast.error('Failed to submit report. Please try again.');
-    }
-  };
-
-  // --- 3. Filtering Logic (The "Mixer") ---
   const filteredReports = reports.filter((report) => {
     const matchesSearch =
       report.domain.toLowerCase().includes(searchTerm.toLowerCase()) ||
       report.type.toLowerCase().includes(searchTerm.toLowerCase());
-
     const matchesCategory = category === 'all' || report.severity === category;
-
     return matchesSearch && matchesCategory;
   });
 
@@ -73,7 +45,7 @@ export default function App() {
     <div className='min-h-screen bg-white text-slate-900 selection:bg-emerald-100 font-sans'>
       <Toaster position='bottom-right' richColors expand={true} />
 
-      <Navbar onReportClick={() => setIsModalOpen(true)} />
+      <Navbar />
 
       <main>
         <Hero />
@@ -103,7 +75,7 @@ export default function App() {
             </div>
 
             <div className='relative group w-full md:w-96'>
-              <Search className='absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-emerald-500 transition-colors' />
+              <SearchIcon className='absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-emerald-500 transition-colors' />
               <input
                 type='text'
                 placeholder='Filter by domain or type...'
@@ -140,17 +112,10 @@ export default function App() {
                 </div>
               )}
             </div>
-
             {!isLoading && <TrendingSidebar reports={reports} />}
           </div>
         </section>
       </main>
-
-      <ReportModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onAddReport={handleAddReport}
-      />
 
       <ViolationDetail
         report={selectedReport}

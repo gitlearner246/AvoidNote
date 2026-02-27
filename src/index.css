@@ -4,6 +4,21 @@
   color-scheme: light;
 }
 
-body {
-  @apply bg-slate-50 text-slate-900 antialiased;
+html {
+  scroll-behavior: smooth;
+}
+
+/* This creates a custom utility to handle the menu visibility */
+@utility mobile-menu-open {
+  display: flex;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+@utility mobile-menu-closed {
+  display: none;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-1rem);
 }
