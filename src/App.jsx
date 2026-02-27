@@ -51,7 +51,7 @@ export default function App() {
       <Navbar />
 
       <main>
-        <Hero />
+        <Hero totalThreats={reports.length} />
 
         {/* GAP FIXED: pt-0 brings the database right under the scanner */}
         <section id='reports' className='max-w-7xl mx-auto px-6 pt-0 pb-24'>
