@@ -8,7 +8,7 @@ export default function PrivacyPolicy({ onClose }) {
           onClick={onClose}
           className='mb-8 text-slate-400 hover:text-slate-900 font-bold uppercase tracking-widest text-xs transition-colors flex items-center gap-2'
         >
-          <span>&larr;</span> Back to Evidence Locker
+          <span>&larr;</span> Back to Top Page
         </button>
 
         <h1 className='text-5xl font-black mb-12 tracking-tight text-slate-900'>
@@ -21,10 +21,10 @@ export default function PrivacyPolicy({ onClose }) {
               1. Scope of Service
             </h2>
             <p>
-              Avoid Note is a public security resource providing an "Evidence
-              Locker" of suspicious web domains. This platform is designed for
+              Avoid Note is a public security resource providing a database of
+              suspicious web domains. This platform is designed strictly for
               informational purposes to help users identify deceptive ad
-              patterns and malicious redirects.
+              patterns, phishing attempts, and malicious redirects.
             </p>
           </section>
 
@@ -34,9 +34,9 @@ export default function PrivacyPolicy({ onClose }) {
             </h2>
             <p>
               We prioritize user anonymity. Avoid Note does not require user
-              accounts, nor does it collect, store, or sell personal data from
-              visitors. We do not use tracking cookies or record individual IP
-              addresses during domain lookups.
+              accounts, nor does it collect, store, or monetize personal data
+              from visitors. We do not utilize tracking cookies or log
+              individual IP addresses during domain lookups.
             </p>
           </section>
 
@@ -46,10 +46,9 @@ export default function PrivacyPolicy({ onClose }) {
             </h2>
             <p>
               Avoid Note functions as an aggregator of threat intelligence. The
-              information presented in the Evidence Locker is gathered from
-              various community reports, public blacklists, and external
-              security APIs. Avoid Note does not conduct independent primary
-              forensic research on every listed domain.
+              information presented is gathered from community reports, public
+              blacklists, and external security APIs. We do not conduct
+              independent primary forensic research on every listed domain.
             </p>
           </section>
 
@@ -58,10 +57,10 @@ export default function PrivacyPolicy({ onClose }) {
               4. Legal Jurisdiction (GDPR)
             </h2>
             <p>
-              Operating out of Salzburg, Austria, Avoid Note complies with the
-              General Data Protection Regulation (GDPR). Since no personal data
-              is collected from visitors, your right to privacy is maintained by
-              design.
+              Operating out of Salzburg, Austria, Avoid Note strictly complies
+              with the General Data Protection Regulation (GDPR). Because no
+              personal data is collected from visitors, your right to privacy is
+              fundamentally protected by design.
             </p>
           </section>
 

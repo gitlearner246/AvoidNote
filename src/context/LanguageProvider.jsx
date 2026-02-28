@@ -11,10 +11,15 @@ const translations = {
     all: 'all',
     critical: 'critical',
     warning: 'warning',
-    analyze: 'Analyze',
-    url: 'URL',
-    forYour: 'for your',
-    safety: 'Safety',
+    // FIXED: Full sentence translation with embedded styling
+    heroHeadline: (
+      <>
+        Analyze{' '}
+        <span className='text-[#10B981] underline decoration-4'>URL</span> for
+        your{' '}
+        <span className='text-[#3949AB] underline decoration-4'>Safety</span>.
+      </>
+    ),
     globalMonitor: 'Live Global Threat Monitor',
     detectedScams: 'Detected Scams',
     urlPlaceholder: 'Paste suspicious URL here...',
@@ -35,10 +40,17 @@ const translations = {
     all: 'alle',
     critical: 'kritisch',
     warning: 'warnung',
-    analyze: 'Analysieren Sie die',
-    url: 'URL',
-    forYour: 'für Ihre',
-    safety: 'Sicherheit',
+    heroHeadline: (
+      <>
+        Analysieren Sie{' '}
+        <span className='text-[#10B981] underline decoration-4'>URLs</span> für
+        Ihre{' '}
+        <span className='text-[#3949AB] underline decoration-4'>
+          Sicherheit
+        </span>
+        .
+      </>
+    ),
     globalMonitor: 'Live Globaler Bedrohungsmonitor',
     detectedScams: 'Erkannte Scams',
     urlPlaceholder: 'Verdächtige URL hier einfügen...',
@@ -59,10 +71,15 @@ const translations = {
     all: 'όλα',
     critical: 'κρίσιμο',
     warning: 'προειδοποίηση',
-    analyze: 'Αναλύστε το',
-    url: 'URL',
-    forYour: 'για την',
-    safety: 'Ασφάλειά σας',
+    heroHeadline: (
+      <>
+        Αναλύστε το{' '}
+        <span className='text-[#10B981] underline decoration-4'>URL</span> για
+        την{' '}
+        <span className='text-[#3949AB] underline decoration-4'>Ασφάλειά</span>{' '}
+        σας.
+      </>
+    ),
     globalMonitor: 'Ζωντανή Παγκόσμια Παρακολούθηση Απειλών',
     detectedScams: 'Εντοπισμένες Απάτες',
     urlPlaceholder: 'Επικολλήστε το ύποπτο URL εδώ...',
@@ -83,11 +100,16 @@ const translations = {
     all: 'すべて',
     critical: '重大',
     warning: '警告',
-    analyze: 'あなたの',
-    url: 'URL',
-    forYour: 'の',
-    safety: '安全性',
-    globalMonitor: 'ライブグローバル脅威モニター',
+    heroHeadline: (
+      <>
+        あなたの
+        <span className='text-[#3949AB] underline decoration-4'>安全</span>
+        のために
+        <span className='text-[#10B981] underline decoration-4'>URL</span>
+        を分析します。
+      </>
+    ),
+    globalMonitor: 'LIVE:世界で検出されたスパムの数',
     detectedScams: '検出された詐欺',
     urlPlaceholder: 'ここに不審なURLを貼り付けてください...',
     analyzeNow: '今すぐ分析',

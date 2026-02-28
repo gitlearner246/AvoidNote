@@ -55,15 +55,9 @@ const Hero = () => {
   return (
     <div id='scan' className='relative pt-24 md:pt-40 pb-12 px-6'>
       <div className='max-w-4xl mx-auto text-center'>
-        {/* TRANSLATED HEADLINE */}
+        {/* REPLACED: Now uses the full-sentence translation with embedded styles */}
         <h1 className='text-2xl md:text-5xl font-black tracking-tighter text-slate-900 mb-8 leading-[1.1] italic'>
-          {t.analyze}{' '}
-          <span className='text-[#10B981] underline decoration-4'>{t.url}</span>{' '}
-          {t.forYour}{' '}
-          <span className='text-[#3949AB] underline decoration-4'>
-            {t.safety}
-          </span>
-          .
+          {t.heroHeadline}
         </h1>
 
         <div className='flex flex-wrap items-center justify-center gap-6 md:gap-12 mb-12'>
